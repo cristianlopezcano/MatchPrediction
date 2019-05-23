@@ -68,12 +68,13 @@ test_labels = np.asarray(test_labels)
 
 print(training_data)
 model = keras.Sequential([
-  keras.layers.Flatten(input_shape=(18,)),
-  keras.layers.Dense(128, activation=tf.nn.relu),
-  keras.layers.Dense(10, activation=tf.nn.softmax)
+  keras.layers.Dense(18, activation=tf.nn.selu),
+  keras.layers.Dense(10, activation=tf.nn.tanh),
+  keras.layers.Dense(5, activation=tf.nn.selu),
+  keras.layers.Dense(5, activation=tf.nn.softmax)
 ])
 
-model.compile(optimizer='adam',
+model.compile(optimizer='SGD',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
