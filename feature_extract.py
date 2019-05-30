@@ -20,9 +20,15 @@ AWAY_SHOTS_FOR = 14
 AWAY_SHOTS_AGAINST = 15
 AWAY_SHOTS_TARGET_FOR = 16
 AWAY_SHOTS_TARGET_AGAINST = 17
-ACTUAL_RESULT = 18
-ACTUAL_HOME_GOALS = 19
-ACTUAL_AWAY_GOALS = 20
+BET365HOME_WIN = 18
+BET365DRAW = 19
+BET365AWAY_WIN = 20
+BETWAYHOME_WIN = 21
+BETWAY_DRAW = 22
+BETWAY_AWAY_WIN = 23
+ACTUAL_RESULT = 24
+ACTUAL_HOME_GOALS = 25
+ACTUAL_AWAY_GOALS = 26
 
 #The number of matches being considered
 NO_MATCHES_CONSIDERED = 5
@@ -159,11 +165,16 @@ for row in reader:
 
                     else:
                         raise Exception('Team not found')
+                for i in range(23, 29):
+                    if row[i] == "":
+                        row[i] = "2.5"
                 entry = [home_no_wins, home_no_losses, home_no_draws, home_goals_scored, \
                 home_goals_conceded, home_shots_for, home_shots_against, home_shots_target_for, \
                 home_shots_target_against, away_no_wins, away_no_draws, away_no_losses, \
                 away_goals_scored, away_goals_conceded, away_shots_for, away_shots_against, \
-                away_shots_target_for, away_shots_target_against, row[6], int(row[4]), int(row[5])]
+                away_shots_target_for, away_shots_target_against, int(float(row[23]) * 100),
+                int(float(row[24]) * 100), int(float(row[25]) * 100), int(float(row[26]) * 100),
+                int(float(row[27]) * 100), int(float(row[28]) * 100), row[6], int(row[4]), int(row[5])]
 
                 data_struct.append(entry)
     j += 1

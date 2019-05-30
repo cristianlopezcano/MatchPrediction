@@ -46,40 +46,40 @@ for line in raw_training_input:
     entry_list = ast.literal_eval(line)
     for entry in entry_list:
         entry = list(entry)
-        training_data.append(entry[:18])
-        training_labels.append(entry[18])
-        if entry[19] > 4:
+        training_data.append(entry[:24])
+        training_labels.append(entry[24])
+        if entry[25] > 4:
             home_goal_training_labels.append(4)
             p1 = 4
         else:
-            home_goal_training_labels.append(entry[19])
-            p1 = entry[19]
-        if entry[20] > 4:
+            home_goal_training_labels.append(entry[25])
+            p1 = entry[25]
+        if entry[26] > 4:
             away_goal_training_labels.append(4)
             p2 = 4
         else:
-            away_goal_training_labels.append(entry[20])
-            p2 = entry[20]
+            away_goal_training_labels.append(entry[26])
+            p2 = entry[26]
         score_training_labels.append(pair(p1,p2))
 
 for line in raw_test_input:
     entry_list = ast.literal_eval(line)
     for entry in entry_list:
         entry = list(entry)
-        test_data.append(entry[:18])
-        test_labels.append(entry[18])
-        if entry[19] > 4:
+        test_data.append(entry[:24])
+        test_labels.append(entry[24])
+        if entry[25] > 4:
             home_goal_test_labels.append(4)
             p1 = 4
         else:
-            home_goal_test_labels.append(entry[19])
-            p1 = entry[19]
-        if entry[20] > 4:
+            home_goal_test_labels.append(entry[25])
+            p1 = entry[25]
+        if entry[26] > 4:
             away_goal_test_labels.append(4)
             p2 = 4
         else:
-            away_goal_test_labels.append(entry[20])
-            p2 = entry[20]
+            away_goal_test_labels.append(entry[26])
+            p2 = entry[26]
         score_test_labels.append(pair(p1,p2))
 
 for count in range(len(training_data)):
@@ -115,7 +115,7 @@ model = keras.Sequential([
 ])
 
 score_model = keras.Sequential([
-  keras.layers.Dense(18, activation=tf.nn.selu),
+  keras.layers.Dense(24, activation=tf.nn.selu),
   keras.layers.Dense(40, activation=tf.nn.tanh),
   keras.layers.Dense(30, activation=tf.nn.selu),
   keras.layers.Dense(25, activation=tf.nn.softmax)
@@ -153,4 +153,4 @@ print("Home goal test accuracy: ", home_test_acc)
 
 print("Away goal test accuracy: ", away_test_acc)
 
-print("Approx correct score accuracy: ", score_acc)
+print("Correct score accuracy: ", score_acc)
