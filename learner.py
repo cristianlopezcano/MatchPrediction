@@ -222,3 +222,4 @@ print("The total amount bet was " + str(amount_bet))
 print("The lowest acheived balance was " + str(lowest_balance) + " on iteration " +  \
          str(lowest_balance_point) + "/" + str(len(predictions)))
 print("The total gain from bet365 was " + str(total_gain))
+print("The percentage gain was " + str(((total_gain) / amount_bet) * 100) + "%")
