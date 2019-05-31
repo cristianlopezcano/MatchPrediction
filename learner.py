@@ -173,6 +173,7 @@ total_gain = 0
 amount_bet = 0
 lowest_balance = 0
 lowest_balance_point = 0
+bets_placed = 0
 for count in range(len(predictions)):
     home_win_prob = predictions[count][0]
     draw_prob = predictions[count][1]
@@ -185,7 +186,8 @@ for count in range(len(predictions)):
     away_win_gain = away_win_prob * away_win_odds
     actual_result = test_labels[count]
 
-    if home_win_gain > 1.2:
+    if home_win_gain > 1.25 and home_win_prob > 0.2:
+        bets_placed += 1
         bet_size = home_win_gain * 100
         total_gain -= bet_size
         amount_bet += bet_size
@@ -196,7 +198,8 @@ for count in range(len(predictions)):
             total_gain += bet_size * home_win_odds
 
 
-    if draw_gain > 1.2:
+    if draw_gain > 1.25 and draw_prob > 0.2:
+        bets_placed += 1
         bet_size = draw_gain * 100
         amount_bet += bet_size
         total_gain -= bet_size
@@ -206,7 +209,8 @@ for count in range(len(predictions)):
         if actual_result == DRAW:
             total_gain += bet_size * draw_odds
 
-    if away_win_gain > 1.2:
+    if away_win_gain > 1.25 and away_win_prob > 0.2:
+        bets_placed += 1
         bet_size = away_win_gain * 100
         amount_bet += bet_size
         total_gain -= bet_size
@@ -219,6 +223,7 @@ for count in range(len(predictions)):
 
 
 print("The total amount bet was " + str(amount_bet))
+print("A total of " + str(bets_placed) + " were placed")
 print("The lowest acheived balance was " + str(lowest_balance) + " on iteration " +  \
          str(lowest_balance_point) + "/" + str(len(predictions)))
 print("The total gain from bet365 was " + str(total_gain))
