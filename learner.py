@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import ast
+import math
 
 HOME_WIN = 0
 DRAW = 1
@@ -83,9 +84,9 @@ for line in raw_test_input:
         score_test_labels.append(pair(p1,p2))
 
 for count in range(len(training_data)):
-    training_data[count] = np.asarray(training_data[count])
+    training_data[count] = np.asarray(training_data[count], dtype='int')
 for count in range(len(test_data)):
-    test_data[count] = np.asarray(test_data[count])
+    test_data[count] = np.asarray(test_data[count], dtype='int')
 for count in range(len(training_labels)):
     if training_labels[count] == 'H':
         training_labels[count] = HOME_WIN
@@ -100,15 +101,15 @@ for count in range(len(test_labels)):
         test_labels[count] = DRAW
     elif test_labels[count] == 'A':
         test_labels[count] = AWAY_WIN
-training_data = np.asarray(training_data)
-test_data = np.asarray(test_data)
-training_labels = np.asarray(training_labels)
-test_labels = np.asarray(test_labels)
-score_training_labels = np.asarray(score_training_labels)
-score_test_labels = np.asarray(score_test_labels)
+training_data = np.asarray(training_data, dtype='int')
+test_data = np.asarray(test_data, dtype='int')
+training_labels = np.asarray(training_labels, dtype='int')
+test_labels = np.asarray(test_labels, dtype='int')
+score_training_labels = np.asarray(score_training_labels, dtype='int')
+score_test_labels = np.asarray(score_test_labels, dtype='int')
 
 model = keras.Sequential([
-  keras.layers.Dense(18, activation=tf.nn.selu),
+  keras.layers.Dense(24, activation=tf.nn.selu),
   keras.layers.Dense(10, activation=tf.nn.tanh),
   keras.layers.Dense(5, activation=tf.nn.selu),
   keras.layers.Dense(5, activation=tf.nn.softmax)
@@ -129,6 +130,7 @@ model.fit(training_data, training_labels, epochs=10)
 
 test_loss,test_acc = model.evaluate(test_data, test_labels)
 
+predictions = model.predict(test_data)
 
 model.fit(training_data, home_goal_training_labels, epochs=5)
 
@@ -154,3 +156,15 @@ print("Home goal test accuracy: ", home_test_acc)
 print("Away goal test accuracy: ", away_test_acc)
 
 print("Correct score accuracy: ", score_acc)
+
+average_gain = 1
+competitor_gain = 1
+for count in range(len(predictions)):
+    average_gain *= predictions[count][test_labels[count]]
+    average_gain = math.sqrt(average_gain)
+    competitor_gain *= 1 / ((test_data[count][18 + test_labels[count]]) / 100)
+    competitor_gain = math.sqrt(competitor_gain)
+
+
+print("Average prediction gain: "  + str(average_gain))
+print("Average competitor gain: " + str(competitor_gain))
