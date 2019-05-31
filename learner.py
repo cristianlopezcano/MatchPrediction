@@ -168,3 +168,57 @@ for count in range(len(predictions)):
 
 print("Average prediction gain: "  + str(average_gain))
 print("Average competitor gain: " + str(competitor_gain))
+
+total_gain = 0
+amount_bet = 0
+lowest_balance = 0
+lowest_balance_point = 0
+for count in range(len(predictions)):
+    home_win_prob = predictions[count][0]
+    draw_prob = predictions[count][1]
+    away_win_prob = predictions[count][2]
+    home_win_odds = test_data[count][18] / 100
+    draw_odds = test_data[count][19] / 100
+    away_win_odds = test_data[count][20] / 100
+    home_win_gain = home_win_prob * home_win_odds
+    draw_gain = draw_prob * draw_odds
+    away_win_gain = away_win_prob * away_win_odds
+    actual_result = test_labels[count]
+
+    if home_win_gain > 1.2:
+        bet_size = home_win_gain * 100
+        total_gain -= bet_size
+        amount_bet += bet_size
+        if total_gain < lowest_balance:
+            lowest_balance = total_gain
+            lowest_balance_point = count
+        if actual_result == HOME_WIN:
+            total_gain += bet_size * home_win_odds
+
+
+    if draw_gain > 1.2:
+        bet_size = draw_gain * 100
+        amount_bet += bet_size
+        total_gain -= bet_size
+        if total_gain < lowest_balance:
+            lowest_balance = total_gain
+            lowest_balance_point = count
+        if actual_result == DRAW:
+            total_gain += bet_size * draw_odds
+
+    if away_win_gain > 1.2:
+        bet_size = away_win_gain * 100
+        amount_bet += bet_size
+        total_gain -= bet_size
+        if total_gain < lowest_balance:
+            lowest_balance = total_gain
+            lowest_balance_point = count
+        if actual_result == AWAY_WIN:
+            total_gain += bet_size * away_win_odds
+
+
+
+print("The total amount bet was " + str(amount_bet))
+print("The lowest acheived balance was " + str(lowest_balance) + " on iteration " +  \
+         str(lowest_balance_point) + "/" + str(len(predictions)))
+print("The total gain from bet365 was " + str(total_gain))
